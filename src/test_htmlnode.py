@@ -1,6 +1,8 @@
 import unittest
 
 from htmlnode import HTMLNode, LeafNode, ParentNode
+from textnode import TextType
+from textdelimiter import *
 
 class TestHTMLNode(unittest.TestCase):
     def test_props_to_html_with_props(self):
@@ -39,5 +41,16 @@ class TestHTMLNode(unittest.TestCase):
             parent_node.to_html(),
             "<div><span><b>grandchild</b></span></div>",
         )
+    
+    def test_split_bold(self):
+        node = TextNode("The text makes me sick **boldtext rules** but some times needs to exist", TextType.TEXT)
+        new_nodes = split_nodes_delimiter([node], "**", TextType.BOLD)
+        expected = [
+            TextNode("The text makes me sick ", TextType.TEXT),
+            TextNode("boldtext rules", TextType.BOLD),
+            TextNode(" but some times needs to exist", TextType.TEXT),
+        ]
+        self.assertEqual(new_nodes, expected)
+
 if __name__ == "__main__":
     unittest.main()
