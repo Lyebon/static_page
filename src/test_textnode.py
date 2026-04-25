@@ -1,6 +1,7 @@
 import unittest
 
 from textnode import TextNode, TextType
+from textdelimiter import *
 
 class TestTextNode(unittest.TestCase):
     def test_eq(self):
@@ -25,7 +26,25 @@ class TestTextNode(unittest.TestCase):
         self.assertNotEqual(node, node6)
         self.assertNotEqual(node7, node9)
 
-        
+    def test_split_bold(self):
+        node = TextNode("The text makes me sick **boldtext rules** but some times needs to exist", TextType.TEXT)
+        new_nodes = split_nodes_delimiter([node], "**", TextType.BOLD)
+        expected = [
+            TextNode("The text makes me sick ", TextType.TEXT),
+            TextNode("boldtext rules", TextType.BOLD),
+            TextNode(" but some times needs to exist", TextType.TEXT),
+        ]
+        self.assertEqual(new_nodes, expected)
+    
+    def test_split_italic(self):
+        node = TextNode("The text makes me sick _boldtext rules_ but some times needs to exist", TextType.TEXT)
+        new_nodes = split_nodes_delimiter([node], "_", TextType.BOLD)
+        expected = [
+            TextNode("The text makes me sick ", TextType.TEXT),
+            TextNode("boldtext rules", TextType.ITALIC),
+            TextNode(" but some times needs to exist", TextType.TEXT),
+        ]
+        self.assertEqual(new_nodes, expected)  
 
 if __name__ == "__main__":
     unittest.main()
