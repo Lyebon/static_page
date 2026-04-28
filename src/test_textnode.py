@@ -2,6 +2,7 @@ import unittest
 
 from textnode import TextNode, TextType
 from textdelimiter import *
+from blockdelimiter import *
 
 class TestTextNode(unittest.TestCase):
     def test_eq(self):
