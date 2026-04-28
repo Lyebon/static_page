@@ -111,14 +111,14 @@ class TestTextNode(unittest.TestCase):
 
     def test_markdown_to_blocks(self):
         md = """
-            This is **bolded** paragraph
+This is **bolded** paragraph
 
-            This is another paragraph with _italic_ text and `code` here
-            This is the same paragraph on a new line
+This is another paragraph with _italic_ text and `code` here
+This is the same paragraph on a new line
 
-            - This is a list
-            - with items
-            """
+- This is a list
+- with items
+"""
         blocks = markdown_to_blocks(md)
         self.assertEqual(
             blocks,
@@ -128,5 +128,39 @@ class TestTextNode(unittest.TestCase):
                 "- This is a list\n- with items",
             ],
         )
+
+    def test_block_to_block_type(self):
+        heading1 = "# bugabuga"
+        heading2 = "## bugabuga"
+        heading3 = "### bugabuga"
+        heading4 = "#### bugabuga"
+        heading5 = "##### bugabuga"
+        heading6 = "###### bugabuga"
+        code = "```bugabuga```"
+        quote = ">burugaga"
+        unordered_list = "- bugabuga"
+        ordered_list = "1. burugaga"
+        paragraph = "bugabuga"
+        tests = [heading1, heading2, heading3, heading4, heading5, heading6, code, quote, ordered_list, unordered_list, paragraph]
+        result = []
+        for test in tests:
+            result.append(block_to_block_type(test))
+        self.assertEqual(
+            result,
+            [
+                BlockType.HEADING,
+                BlockType.HEADING,
+                BlockType.HEADING,
+                BlockType.HEADING,
+                BlockType.HEADING,
+                BlockType.HEADING,
+                BlockType.CODE,
+                BlockType.QUOTE,
+                BlockType.OLIST,
+                BlockType.ULIST,
+                BlockType.PARAGRAPH
+            ],
+        )
+
 if __name__ == "__main__":
     unittest.main()
