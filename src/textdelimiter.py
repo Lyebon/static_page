@@ -40,7 +40,6 @@ def extract_markdown_images(text):
 Recibe una lista de nodos y se fija por nodos con propiedades
 si el texto tiene una imagen o link y agregarlos como TextNode nuevos
 '''
-
 def split_nodes_image(old_nodes):
     new_nodes = []
     for node in old_nodes:
@@ -86,9 +85,11 @@ def split_nodes_link(old_nodes):
                 new_nodes.append(TextNode(node_text, TextType.TEXT))
     return new_nodes
 
+
 '''
 Genera de un texto plano la separacion respectiva de las partes
 armando TextNode validos con la oracion
+y devuelve una lista de nodos de texto validos
 '''
 def text_to_textnodes(text):
     text_node = [TextNode(text, TextType.TEXT)]

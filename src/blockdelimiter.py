@@ -1,14 +1,25 @@
 from enum import Enum
+from htmlnode import HTMLNode, ParentNode, LeafNode
+from textdelimiter import text_to_textnodes
 
+
+'''
+BlockType:
+clase con tipos validos para bloques
+'''
 class BlockType(Enum):
     PARAGRAPH = "paragraph"
     HEADING = "heading"
     CODE = "code"
     QUOTE = "quote"
-    UNORDERED_LIST = "unordered_list"
-    ORDERED_LIST = "ordered_list"
+    OLIST = "ordered_list"
+    ULIST = "unordered_list"
 
 
+'''
+markdown_to_blocks:
+Funcion que separa el texto en parrafos
+'''
 def markdown_to_blocks(markdown):
     blocks = markdown.split("\n\n")
     filtered_blocks = []
@@ -19,20 +30,45 @@ def markdown_to_blocks(markdown):
         filtered_blocks.append(block)
     return filtered_blocks
 
+'''
+block_to_block_type:
+Funcion que revisa el tipo de parrafo que es
+y le asigna un BlockType para referenciarlo
+'''
 def block_to_block_type(block):
-    if block[0] == "#":
-        for i in range(0, 6):
-            if block[i] == "#" and block[i+1] == " ":
-                return BlockType.HEADING
-    elif block[0] == "`":
-        for i in range(0,3):
-            if block[i] == "`" and block[-i] == "`":
-                return BlockType.CODE
-    elif block[0] == ">" and block[1] != "":
+    lines = block.split("\n")
+    if block.startswith(("# ", "## ", "### ", "#### ", "##### ", "###### ")):
+        return BlockType.HEADING
+    if len(lines) > 1 and lines[0].startswith("```") and lines[-1].startswith("```"):
+        return BlockType.CODE
+    if block.startswith(">"):
+        for line in lines:
+            if not line.startswith(">"):
+                return BlockType.PARAGRAPH
         return BlockType.QUOTE
-    elif block[0] == "-" and block[1] == " ":
-        return BlockType.UNORDERED_LIST
-    elif block[0] == "1" and block[1] == "." and block[2] == " ":
-        return BlockType.ORDERED_LIST
-    else:
-        return BlockType.PARAGRAPH
+    if block.startswith("- "):
+        for line in lines:
+            if not line.startswith("- "):
+                return BlockType.PARAGRAPH
+        return BlockType.ULIST
+    if block.startswith("1. "):
+        i = 1
+        for line in lines:
+            if not line.startswith(f"{i}. "):
+                return BlockType.PARAGRAPH
+            i += 1
+        return BlockType.OLIST
+    return BlockType.PARAGRAPH
+
+
+'''
+markdown to htmlnode:
+Funcion que transforma un bloque de texto en nodos html validos
+'''
+def markdown_to_html_node(markdown):
+    blocks = markdown_to_blocks(markdown)
+    for block in blocks:
+        block_type = block_to_block_type(block)
+
+
+

@@ -129,38 +129,19 @@ This is the same paragraph on a new line
             ],
         )
 
-    def test_block_to_block_type(self):
-        heading1 = "# bugabuga"
-        heading2 = "## bugabuga"
-        heading3 = "### bugabuga"
-        heading4 = "#### bugabuga"
-        heading5 = "##### bugabuga"
-        heading6 = "###### bugabuga"
-        code = "```bugabuga```"
-        quote = ">burugaga"
-        unordered_list = "- bugabuga"
-        ordered_list = "1. burugaga"
-        paragraph = "bugabuga"
-        tests = [heading1, heading2, heading3, heading4, heading5, heading6, code, quote, ordered_list, unordered_list, paragraph]
-        result = []
-        for test in tests:
-            result.append(block_to_block_type(test))
-        self.assertEqual(
-            result,
-            [
-                BlockType.HEADING,
-                BlockType.HEADING,
-                BlockType.HEADING,
-                BlockType.HEADING,
-                BlockType.HEADING,
-                BlockType.HEADING,
-                BlockType.CODE,
-                BlockType.QUOTE,
-                BlockType.OLIST,
-                BlockType.ULIST,
-                BlockType.PARAGRAPH
-            ],
-        )
+    def test_block_to_block_types(self):
+        block = "# heading"
+        self.assertEqual(block_to_block_type(block), BlockType.HEADING)
+        block = "```\ncode\n```"
+        self.assertEqual(block_to_block_type(block), BlockType.CODE)
+        block = "> quote\n> more quote"
+        self.assertEqual(block_to_block_type(block), BlockType.QUOTE)
+        block = "- list\n- items"
+        self.assertEqual(block_to_block_type(block), BlockType.ULIST)
+        block = "1. list\n2. items"
+        self.assertEqual(block_to_block_type(block), BlockType.OLIST)
+        block = "paragraph"
+        self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
 
 if __name__ == "__main__":
     unittest.main()

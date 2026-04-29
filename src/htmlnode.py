@@ -18,8 +18,6 @@ class HTMLNode():
     
     # Implementacion a HTML de la configuracion pasada en el prop
     def props_to_html(self):
-
-        #Resultado acumulable
         result=""
 
         # Si PROPS no contiene nada devolvemos el resultado que es el string vacio
@@ -40,10 +38,12 @@ class HTMLNode():
 
 
 class LeafNode(HTMLNode):
-    # Nodo hoja, el final de la ramificacion
-    # No contiene ningun hijo y finaliza la rama del arbol
-    # (Contiene igualmente un TAG, VALUE y PROPS como parametros
-    # para la creacion, interpretacion y configuracion del contenido)
+    '''
+    Nodo hoja, el final de la ramificacion
+    No contiene ningun hijo y finaliza la rama del arbol
+    (Contiene igualmente un TAG, VALUE y PROPS como parametros
+    para la creacion, interpretacion y configuracion del contenido)
+    '''
     def __init__(self, tag, value, props=None):
         super().__init__(tag, value, children=None, props=props)
         
