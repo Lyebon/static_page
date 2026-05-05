@@ -1,7 +1,7 @@
 from enum import Enum
 from htmlnode import HTMLNode, ParentNode, LeafNode
-from textdelimiter import text_to_textnodes
-from textnode import text_node_to_html_node
+from textdelimiter import text_to_textnodes, split_nodes_delimiter
+from textnode import text_node_to_html_node, TextNode, TextType
 
 
 '''
@@ -70,4 +70,36 @@ def markdown_to_html_node(markdown):
     block_of_html_nodes = []
     blocks = markdown_to_blocks(markdown)
     for text in blocks:
-        pass
+        block_type = block_to_block_type(text)
+        if block_type == BlockType.PARAGRAPH:
+            node = ParentNode("p", paragraph_to_textnode(text))
+            block_of_html_nodes.append(node)
+        if block_type == BlockType.CODE:
+            node = ParentNode("pre", code_to_html(text))
+            block_of_html_nodes.append(node)
+    return ParentNode("div", block_of_html_nodes)
+
+def code_to_html(text):
+    text_node = split_nodes_delimiter(TextNode(text, TextType.TEXT), "`", TextType.TEXT)
+    for node in text_node:
+        html_node = text_node_to_html_node(node)
+    return [ParentNode("code", [html_node])]
+
+def paragraph_to_textnode(text):
+    lines = text.split("\n")
+    text_join = ""
+    for line in lines:
+        if text_join == "":
+            text_join = line
+        else:
+            text_join += f" {line}"
+    text_node = text_to_textnodes(text_join)
+    return text_to_child(text_node)
+
+def text_to_child(text):
+    child_nodes = []
+    for line in text:
+        node = text_node_to_html_node(line)
+        child_nodes.append(node)
+    return child_nodes
+        
