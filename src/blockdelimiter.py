@@ -75,6 +75,14 @@ def markdown_to_html_node(markdown):
             block_of_html_nodes.append(paragraph_to_html(text))
         if block_type == BlockType.CODE:
             block_of_html_nodes.append(code_to_html(text))
+        if block_type == BlockType.HEADING:
+            block_of_html_nodes.append(heading_to_html(text))
+        if block_type == BlockType.QUOTE:
+            block_of_html_nodes.append(quote_to_html(text))
+        if block_type == BlockType.OLIST:
+            block_of_html_nodes.append(olist_to_html(text))
+        if block_type == BlockType.ULIST:
+            block_of_html_nodes.append(ulist_to_html(text))
     return ParentNode("div", block_of_html_nodes)
 
 def code_to_html(text):
@@ -82,7 +90,40 @@ def code_to_html(text):
     code_block = [LeafNode("code" , backticks_strip)]
     return ParentNode("pre", code_block)
 
+def heading_to_html(text):
+    for i in range(0, 7):
+        if text[i] == " ":
+            strip_text = text[i+1:]
+            text_node = text_to_textnodes(strip_text)
+            childs = text_to_child(text_node)
+            return ParentNode(f"h{i}", childs)
 
+def quote_to_html(text):
+    strip_text = text[1:]
+    text_node = text_to_textnodes(strip_text)
+    childs = text_to_child(text_node)
+    return ParentNode("blockquote", childs)
+
+def olist_to_html(text):
+    split_text = text.split("\n")
+    olist = []
+    for line in split_text:
+        strip_line = line[3:]
+        text_node = text_to_textnodes(strip_line)
+        childs = text_to_child(text_node)
+        olist.append(ParentNode("li", childs))
+    return ParentNode("ol", olist)
+
+
+def ulist_to_html(text):
+    split_text = text.split("\n")
+    ulist = []
+    for line in split_text:
+        strip_line = line[2:]
+        text_node = text_to_textnodes(strip_line)
+        childs = text_to_child(text_node)
+        ulist.append(ParentNode("li", childs))
+    return ParentNode("ul", ulist)
 
 def paragraph_to_html(text):
     lines = text.split("\n")

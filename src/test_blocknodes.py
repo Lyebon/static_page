@@ -75,7 +75,9 @@ the **same** even with inline stuff
         md = """
 # This is **bolded** heading
 
-###### This is another _italic_ heading
+## This is other `code` heading
+
+>This is another _italic_ quotes
 
 This is another paragraph with _italic_ text and `code` here
 This is the same paragraph on a new line
@@ -88,12 +90,12 @@ This is the same paragraph on a new line
 - unordered
 - with items
 """
-        blocks = markdown_to_blocks(md)
+        node = markdown_to_html_node(md)
+        html = node.to_html()
         self.assertEqual(
-             blocks,
-            [
-                ("<div><h1>This is <b>bolded</b> heading</h1><h6>This is another <i>italic</i> heading</h6><p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p><ol><li>This is a list</li><li>Ordered</li><li>With items</li></ol><ul><li>This is a list</li><li>unordered</li><li>with items</li></ul></div>")
-            ],
+            html,
+            "<div><h1>This is <b>bolded</b> heading</h1><h2>This is other <code>code</code> heading</h2><blockquote>This is another <i>italic</i> quotes</blockquote><p>This is another paragraph with <i>italic</i> text and <code>code</code> here This is the same paragraph on a new line</p><ol><li>This is a list</li><li>Ordered</li><li>With items</li></ol><ul><li>This is a list</li><li>unordered</li><li>with items</li></ul></div>"
+            ,
         )
 
 
