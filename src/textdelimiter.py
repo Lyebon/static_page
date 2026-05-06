@@ -2,7 +2,7 @@ import re
 from textnode import TextNode, TextType
 '''
 Split nodes delimiter:
-Recibe una lista de nodos, un delimitador para separar texto y el tipo de texto a separar
+Recibe una lista de nodos, un delimitador para separar texto y el tipo del texto a separar
 Si el texto ya tiene un formato lo agrega a la lista
 si no divide el texto, revisa y agrega nuevos nodos con las propiedades correctas
 '''

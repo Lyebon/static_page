@@ -72,20 +72,19 @@ def markdown_to_html_node(markdown):
     for text in blocks:
         block_type = block_to_block_type(text)
         if block_type == BlockType.PARAGRAPH:
-            node = ParentNode("p", paragraph_to_textnode(text))
-            block_of_html_nodes.append(node)
+            block_of_html_nodes.append(paragraph_to_html(text))
         if block_type == BlockType.CODE:
-            node = ParentNode("pre", code_to_html(text))
-            block_of_html_nodes.append(node)
+            block_of_html_nodes.append(code_to_html(text))
     return ParentNode("div", block_of_html_nodes)
 
 def code_to_html(text):
-    text_node = split_nodes_delimiter(TextNode(text, TextType.TEXT), "`", TextType.TEXT)
-    for node in text_node:
-        html_node = text_node_to_html_node(node)
-    return [ParentNode("code", [html_node])]
+    backticks_strip = text[4:-3]
+    code_block = [LeafNode("code" , backticks_strip)]
+    return ParentNode("pre", code_block)
 
-def paragraph_to_textnode(text):
+
+
+def paragraph_to_html(text):
     lines = text.split("\n")
     text_join = ""
     for line in lines:
@@ -94,7 +93,8 @@ def paragraph_to_textnode(text):
         else:
             text_join += f" {line}"
     text_node = text_to_textnodes(text_join)
-    return text_to_child(text_node)
+    childs = text_to_child(text_node)
+    return ParentNode("p", childs)
 
 def text_to_child(text):
     child_nodes = []
