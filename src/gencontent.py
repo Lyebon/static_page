@@ -17,14 +17,19 @@ def read_file(file):
     markdown = open(file, "r")
     return markdown.read()
 
+def write_file(file):
+    pass
+
 
 def generate_page(from_path, template_path, dest_path):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
-    text = open(from_path, 'r')
-    template = open(template_path, 'r')
-    read_text = text.readline()
-    title = extract_title(read_text)
-    template.replace('Title', title)
-    print(template)
+    markdown = read_file(from_path)
+    template = read_file(template_path)
+    title = extract_title(markdown)
+    html_nodes = markdown_to_html_node(markdown)
+    template.replace("Title", title)
+    content = html_nodes.to_html()
+    template.replace("Content",content)
+
 
 main()

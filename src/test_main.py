@@ -14,5 +14,8 @@ sauron did nothing rong
         self.assertEqual(result, 'Que grande tolkien')
 
 
+    def test_generate_page(self):
+        pass
+
 if __name__ == "__main__":
     unittest.main()
