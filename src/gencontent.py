@@ -2,12 +2,20 @@ from blockdelimiter import markdown_to_html_node
 
 def main():
     generate_page('content/index.md', 'template.html', 'public')
+    pass
 
 def extract_title(markdown):
-    if not markdown.startswith('# '):
-        raise Exception("does not have an h1 header title")
-    strip_text = markdown.strip('# ')
-    return strip_text
+    split_markdown = markdown.split("\n")
+    for line in split_markdown:
+        if line.startswith("# "):
+            strip_text = line.strip('# ')
+            return strip_text
+    raise Exception("does not have an h1 header title")
+    
+
+def read_file(file):
+    markdown = open(file, "r")
+    return markdown.read()
 
 
 def generate_page(from_path, template_path, dest_path):
