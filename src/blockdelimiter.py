@@ -99,8 +99,12 @@ def heading_to_html(text):
             return ParentNode(f"h{i}", childs)
 
 def quote_to_html(text):
-    strip_text = text[1:]
-    text_node = text_to_textnodes(strip_text)
+    result = []
+    text_split = text.split("\n")
+    for line in text_split:
+        result.append(line[1:].strip())
+    join_text = "\n".join(result)
+    text_node = text_to_textnodes(join_text)
     childs = text_to_child(text_node)
     return ParentNode("blockquote", childs)
 

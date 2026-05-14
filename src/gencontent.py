@@ -1,8 +1,6 @@
 from blockdelimiter import markdown_to_html_node
+import os
 
-def main():
-    generate_page('content/index.md', 'template.html', 'public')
-    pass
 
 def extract_title(markdown):
     split_markdown = markdown.split("\n")
@@ -14,11 +12,13 @@ def extract_title(markdown):
     
 
 def read_file(file):
-    markdown = open(file, "r")
-    return markdown.read()
+    with open(file) as f:
+        text = f.read()
+        return text
 
-def write_file(file):
-    pass
+def write_file(path, template):
+    with open(path, "w") as f:
+        f.write(template)
 
 
 def generate_page(from_path, template_path, dest_path):
@@ -27,9 +27,9 @@ def generate_page(from_path, template_path, dest_path):
     template = read_file(template_path)
     title = extract_title(markdown)
     html_nodes = markdown_to_html_node(markdown)
-    template.replace("Title", title)
+    title_template = template.replace("{{ Title }}", title)
     content = html_nodes.to_html()
-    template.replace("Content",content)
-
-
-main()
+    final_template = title_template.replace("{{ Content }}",content)
+    directory = os.path.dirname(dest_path)
+    os.makedirs(directory, exist_ok=True)
+    write_file(dest_path, final_template)

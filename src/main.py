@@ -1,13 +1,13 @@
 import os
 import shutil
+from gencontent import generate_page
 
 def main():
-    public_directory = "public"
-    static_dir = "static"
-    if os.path.exists(public_directory):
-        shutil.rmtree(public_directory)
-    os.mkdir(public_directory)
-    copy_static(static_dir, public_directory)
+    if os.path.exists("public"):
+        shutil.rmtree("public")
+    os.mkdir("public")
+    copy_static("static", "public")
+    generate_page("content/index.md", "template.html", "public/index.html")
 
 
 def copy_static(static, public):

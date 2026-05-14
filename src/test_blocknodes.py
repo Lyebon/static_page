@@ -77,7 +77,7 @@ the **same** even with inline stuff
 
 ## This is other `code` heading
 
->This is another _italic_ quotes
+> This is another _italic_ quotes
 
 This is another paragraph with _italic_ text and `code` here
 This is the same paragraph on a new line
