@@ -1,9 +1,15 @@
 import os
 import shutil
+import sys
 from gencontent import generate_pages_recursive
 from pathlib import Path
 
+
 def main():
+    if len(sys.argv)>1:
+        basepath = sys.argv[1]
+    else:
+        basepath = "/"
     public = Path("public")
     if os.path.exists(public):
         shutil.rmtree(public)
