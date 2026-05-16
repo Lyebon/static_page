@@ -1,13 +1,15 @@
 import os
 import shutil
-from gencontent import generate_page
+from gencontent import generate_pages_recursive
+from pathlib import Path
 
 def main():
-    if os.path.exists("public"):
-        shutil.rmtree("public")
-    os.mkdir("public")
-    copy_static("static", "public")
-    generate_page("content/index.md", "template.html", "public/index.html")
+    public = Path("public")
+    if os.path.exists(public):
+        shutil.rmtree(public)
+    os.mkdir(public)
+    copy_static(Path("static"), public)
+    generate_pages_recursive(Path("content"), "template.html", public)
 
 
 def copy_static(static, public):
