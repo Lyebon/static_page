@@ -1,7 +1,7 @@
 from enum import Enum
-from htmlnode import HTMLNode, ParentNode, LeafNode
-from textdelimiter import text_to_textnodes, split_nodes_delimiter
-from textnode import text_node_to_html_node, TextNode, TextType
+from htmlnode import ParentNode, LeafNode
+from textdelimiter import text_to_textnodes
+from textnode import text_node_to_html_node
 
 
 '''
@@ -21,7 +21,7 @@ class BlockType(Enum):
 markdown_to_blocks:
 Funcion que separa el texto en parrafos
 '''
-def markdown_to_blocks(markdown):
+def markdown_to_blocks(markdown: str) -> list[str]:
     blocks = markdown.split("\n\n")
     filtered_blocks = []
     for block in blocks:
@@ -31,12 +31,13 @@ def markdown_to_blocks(markdown):
         filtered_blocks.append(block)
     return filtered_blocks
 
+
 '''
 block_to_block_type:
 Funcion que revisa el tipo de parrafo que es
 y le asigna un BlockType para referenciarlo
 '''
-def block_to_block_type(block):
+def block_to_block_type(block:str) -> BlockType:
     lines = block.split("\n")
     if block.startswith(("# ", "## ", "### ", "#### ", "##### ", "###### ")):
         return BlockType.HEADING
@@ -66,7 +67,7 @@ def block_to_block_type(block):
 markdown to htmlnode:
 Funcion que transforma un bloque de texto en bloques html validos
 '''
-def markdown_to_html_node(markdown):
+def markdown_to_html_node(markdown: str) -> ParentNode:
     block_of_html_nodes = []
     blocks = markdown_to_blocks(markdown)
     for text in blocks:
@@ -85,12 +86,12 @@ def markdown_to_html_node(markdown):
             block_of_html_nodes.append(ulist_to_html(text))
     return ParentNode("div", block_of_html_nodes)
 
-def code_to_html(text):
+def code_to_html(text:str) -> ParentNode:
     backticks_strip = text[4:-3]
     code_block = [LeafNode("code" , backticks_strip)]
     return ParentNode("pre", code_block)
 
-def heading_to_html(text):
+def heading_to_html(text:str) -> ParentNode:
     for i in range(0, 7):
         if text[i] == " ":
             strip_text = text[i+1:]
@@ -98,7 +99,7 @@ def heading_to_html(text):
             childs = text_to_child(text_node)
             return ParentNode(f"h{i}", childs)
 
-def quote_to_html(text):
+def quote_to_html(text:str) -> ParentNode:
     result = []
     text_split = text.split("\n")
     for line in text_split:
@@ -108,7 +109,7 @@ def quote_to_html(text):
     childs = text_to_child(text_node)
     return ParentNode("blockquote", childs)
 
-def olist_to_html(text):
+def olist_to_html(text:str) -> ParentNode:
     split_text = text.split("\n")
     olist = []
     for line in split_text:
@@ -118,8 +119,7 @@ def olist_to_html(text):
         olist.append(ParentNode("li", childs))
     return ParentNode("ol", olist)
 
-
-def ulist_to_html(text):
+def ulist_to_html(text:str) -> ParentNode:
     split_text = text.split("\n")
     ulist = []
     for line in split_text:
@@ -129,7 +129,7 @@ def ulist_to_html(text):
         ulist.append(ParentNode("li", childs))
     return ParentNode("ul", ulist)
 
-def paragraph_to_html(text):
+def paragraph_to_html(text:str) -> ParentNode:
     lines = text.split("\n")
     text_join = ""
     for line in lines:
@@ -141,7 +141,7 @@ def paragraph_to_html(text):
     childs = text_to_child(text_node)
     return ParentNode("p", childs)
 
-def text_to_child(text):
+def text_to_child(text:str) -> list[LeafNode]:
     child_nodes = []
     for line in text:
         node = text_node_to_html_node(line)

@@ -6,7 +6,7 @@ Recibe una lista de nodos, un delimitador para separar texto y el tipo del texto
 Si el texto ya tiene un formato lo agrega a la lista
 si no divide el texto, revisa y agrega nuevos nodos con las propiedades correctas
 '''
-def split_nodes_delimiter(old_nodes, delimiter, text_type):
+def split_nodes_delimiter(old_nodes: list[TextNode], delimiter:str, text_type:TextType) -> list[TextNode]:
     nodes = []
     for node in old_nodes:
         if node.text_type != TextType.TEXT:
@@ -29,10 +29,10 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
 Extraen la informacion de Links o Imagenes para generar el nodo de un texto plano.
 devuelven una lista vacia si no encuentra nada o una lista de tuplas
 '''
-def extract_markdown_links(text):
+def extract_markdown_links(text: str):
     return re.findall(r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)",text)
 
-def extract_markdown_images(text):
+def extract_markdown_images(text: str):
     return re.findall(r"!\[([^\[\]]*)\]\(([^\(\)]*)\)",text)
      
 
@@ -40,7 +40,7 @@ def extract_markdown_images(text):
 Recibe una lista de nodos y se fija por nodos con propiedades
 si el texto tiene una imagen o link y agregarlos como TextNode nuevos
 '''
-def split_nodes_image(old_nodes):
+def split_nodes_image(old_nodes: list[TextNode]) -> list[TextNode]:
     new_nodes = []
     for node in old_nodes:
         if node.text_type != TextType.TEXT:
@@ -63,7 +63,7 @@ def split_nodes_image(old_nodes):
     return new_nodes
 
 
-def split_nodes_link(old_nodes):
+def split_nodes_link(old_nodes: list[TextNode]) -> list[TextNode]:
     new_nodes = []
     for node in old_nodes:
         if node.text_type != TextType.TEXT:
@@ -91,7 +91,7 @@ Genera de un texto plano la separacion respectiva de las partes
 armando TextNode validos con la oracion
 y devuelve una lista de nodos de texto validos
 '''
-def text_to_textnodes(text):
+def text_to_textnodes(text: str) -> list[TextNode]:
     text_node = [TextNode(text, TextType.TEXT)]
     node_split = split_nodes_delimiter(text_node, "**", TextType.BOLD)
     node_split = split_nodes_delimiter(node_split, "_", TextType.ITALIC)

@@ -38,7 +38,7 @@ Nodos de texto a nodos de HTML
 usa nodos de texto y le agrega el tag correspondiente
 para utilizarlos como nodos html
 '''
-def text_node_to_html_node(text_node):
+def text_node_to_html_node(text_node: TextNode) -> LeafNode:
     if text_node.text_type == TextType.TEXT:
         return LeafNode(None, text_node.text)
     if text_node.text_type == TextType.BOLD:
