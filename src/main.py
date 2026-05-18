@@ -10,22 +10,22 @@ def main():
         basepath = sys.argv[1]
     else:
         basepath = "/"
-    public = Path("docs")
-    if os.path.exists(public):
-        shutil.rmtree(public)
-    os.mkdir(public)
+    docs = Path("docs")
+    if os.path.exists(docs):
+        shutil.rmtree(docs)
+    os.mkdir(docs)
     copy_static(Path("static"), public)
-    generate_pages_recursive(Path(basepath), "template.html", basepath)
+    generate_pages_recursive(Path("content"), "template.html", docs, basepath)
 
 
-def copy_static(static, public):
+def copy_static(static, docs):
     dir_list = os.listdir(static)
     for dir in dir_list:
         path = os.path.join(static, dir)
         if os.path.isfile(path):
-            shutil.copy(path, public)
+            shutil.copy(path, docs)
         else:
-            pub_path = os.path.join(public, dir)
+            pub_path = os.path.join(docs, dir)
             os.mkdir(pub_path)
             copy_static(path, pub_path)
 
