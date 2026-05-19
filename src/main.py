@@ -14,7 +14,7 @@ def main():
     if os.path.exists(docs):
         shutil.rmtree(docs)
     os.mkdir(docs)
-    copy_static(Path("static"), public)
+    copy_static(Path("static"), docs)
     generate_pages_recursive(Path("content"), "template.html", docs, basepath)
 
 

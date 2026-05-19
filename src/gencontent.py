@@ -42,8 +42,8 @@ def generate_pages_recursive(dir_path_content: pathlib.Path, template_path: path
     for content in content_dir:
         content_path = dir_path_content/content
         if os.path.isfile(content_path):
-            docs_path = dest_dir_path/content
+            docs_path = dest_dir_path/"index.html"
             generate_page(content_path, template_path, docs_path, basepath)
         else:
             docs_path = dest_dir_path/content
-            generate_pages_recursive(content_path, template_path, docsc_path, basepath)
+            generate_pages_recursive(content_path, template_path, docs_path, basepath)
